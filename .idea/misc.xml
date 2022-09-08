@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/drawable/header.xml" value="0.1035" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/drawable/ic_baseline_photo_camera_24.xml" value="0.172" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/drawable/ic_btn_action_menu.xml" value="0.172" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/drawable/ic_btn_action_menu_change_name.xml" value="0.172" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/drawable/ripple_effect.xml" value="0.172" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/activity_register.xml" value="0.36666666666666664" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/fragment_base_change.xml" value="0.2287162162162162" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/fragment_change_bio.xml" value="0.23783783783783785" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/fragment_change_name.xml" value="0.36666666666666664" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/fragment_change_username.xml" value="0.23783783783783785" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/fragment_chats.xml" value="0.36666666666666664" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/fragment_crope_image.xml" value="0.23783783783783785" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/fragment_enter_code.xml" value="0.36666666666666664" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/fragment_enter_phone_number.xml" value="0.36666666666666664" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/menu/settings_action_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/menu/settings_crope_image.xml" value="0.23716216216216215" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/menu/settings_menu_confirm.xml" value="0.23783783783783785" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
