@@ -13,6 +13,9 @@ import com.example.telegramclone.models.User
 import com.example.telegramclone.ui.fragments.ChatsFragment
 import com.example.telegramclone.ui.objects.AppDrawer
 import com.example.telegramclone.utilits.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,15 +31,11 @@ class MainActivity : AppCompatActivity() {
         APP_ACTIVITY =  this
         initFirebase()
         initUser {
-            initContacts()
+            CoroutineScope(Dispatchers.IO).launch {
+                initContacts()
+            }
             initFields()
             initFunc()
-        }
-    }
-
-    private fun initContacts() {
-        if (checkPermission(READ_CONTACTS)) {
-            showToast("Чтение контактов")
         }
     }
 
@@ -73,7 +72,9 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (ContextCompat.checkSelfPermission(APP_ACTIVITY, READ_CONTACTS) == PackageManager.PERMISSION_GRANTED)
-            initContacts()
+            CoroutineScope(Dispatchers.IO).launch {
+                initContacts()
+            }
     }
 
 
