@@ -1,14 +1,9 @@
 package com.example.telegramclone.ui.fragments
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.telegramclone.MainActivity
 import com.example.telegramclone.utilits.APP_ACTIVITY
 
-open class BaseFragment(layout: Int) : Fragment(layout) {
+open class BaseFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
@@ -19,7 +14,6 @@ open class BaseFragment(layout: Int) : Fragment(layout) {
         super.onStop()
         APP_ACTIVITY.appDrawer.enableDrawer()
     }
-
 
 
 }

@@ -10,7 +10,7 @@ import com.example.telegramclone.activities.RegisterActivity
 import com.example.telegramclone.databinding.FragmentSettingsBinding
 import com.example.telegramclone.utilits.*
 
-class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
+class SettingsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentSettingsBinding
 
