@@ -3,9 +3,12 @@ package com.example.telegramclone.utilits
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.provider.ContactsContract
+import com.example.telegramclone.MainActivity
+import com.example.telegramclone.activities.RegisterActivity
 import com.example.telegramclone.models.CommonModel
 import com.example.telegramclone.models.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -116,3 +119,56 @@ fun updatePhonesToDatabase(arrayContacts: ArrayList<CommonModel>) {
 
 fun DataSnapshot.getCommonModel(): CommonModel =
     this.getValue(CommonModel::class.java) ?: CommonModel()
+
+fun signInForNewUsers(credential: PhoneAuthCredential, phoneNumber: String) {
+    AUTH.signInWithCredential(credential).addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            val uid = AUTH.currentUser?.uid.toString()
+            val dateMap = mutableMapOf<String, Any>()
+            dateMap[CHILD_ID] = uid
+            dateMap[CHILD_PHONE] = phoneNumber
+            dateMap[CHILD_USERNAME] = uid
+            dateMap[CHILD_FULL_NAME] = uid
+
+            REF_DATABASE_ROOT.child(NODE_PHONES).child(phoneNumber).setValue(uid)
+                .addOnFailureListener { showToast(it.message.toString()) }
+                .addOnSuccessListener {
+                    REF_DATABASE_ROOT.child(NODE_USER).child(uid).updateChildren(dateMap)
+                        .addOnSuccessListener {
+                            showToast("Добро пожаловать")
+                            REG_ACTIVITY.replaceActivity(MainActivity())
+                        }
+                        .addOnFailureListener { showToast(it.message.toString()) }
+                }
+        } else {
+            showToast(task.exception?.message.toString())
+        }
+    }
+}
+
+fun signInForOldUsers(credential: PhoneAuthCredential) {
+    AUTH.signInWithCredential(credential).addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            showToast("Добро пожаловать снова")
+            REG_ACTIVITY.replaceActivity(MainActivity())
+        } else {
+            showToast(task.exception?.message.toString())
+        }
+    }
+}
+
+fun signIn(credential: PhoneAuthCredential, phoneNumber: String) {
+    val listOfPhones = mutableListOf<String>()
+    REF_DATABASE_ROOT.child(NODE_PHONES)
+        .addListenerForSingleValueEvent(AppValueEventListener {
+            it.children.forEach { snapshot ->
+                listOfPhones.add(snapshot.key.toString())
+            }
+            if (listOfPhones.contains(phoneNumber)) {
+                signInForOldUsers(credential)
+            } else {
+                signInForNewUsers(credential, phoneNumber)
+            }
+        })
+}
+

@@ -1,15 +1,10 @@
 package com.example.telegramclone.ui.fragments
 
 import androidx.fragment.app.Fragment
-import com.example.telegramclone.MainActivity
 import com.example.telegramclone.R
 import com.example.telegramclone.activities.RegisterActivity
-import com.example.telegramclone.utilits.AUTH
-import com.example.telegramclone.utilits.replaceActivity
-import com.example.telegramclone.utilits.replaceFragment
-import com.example.telegramclone.utilits.showToast
+import com.example.telegramclone.utilits.*
 import com.google.firebase.FirebaseException
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
@@ -25,22 +20,18 @@ class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) 
         super.onStart()
         callBacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                AUTH.signInWithCredential(credential).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        showToast("Добро пожаловать")
-                        (activity as RegisterActivity).replaceActivity(MainActivity())
-                    } else {
-                        showToast(it.exception?.message.toString())
-                    }
-                }
+                signIn(credential, phoneNumber)
             }
 
-            override fun onVerificationFailed(p0: FirebaseException) {
-                showToast(p0.message.toString())
+            override fun onVerificationFailed(e: FirebaseException) {
+                showToast(e.message.toString())
             }
 
-            override fun onCodeSent(id: String, token: PhoneAuthProvider.ForceResendingToken) {
-                replaceFragment(EnterCodeFragment(phoneNumber, id))
+            override fun onCodeSent(
+                verificationId: String,
+                token: PhoneAuthProvider.ForceResendingToken
+            ) {
+                replaceFragment(EnterCodeFragment(phoneNumber, verificationId))
             }
         }
         register_btn_next.setOnClickListener { sendCode() }

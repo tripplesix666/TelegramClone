@@ -1,10 +1,10 @@
 package com.example.telegramclone.ui.fragments
 
 import androidx.fragment.app.Fragment
-import com.example.telegramclone.MainActivity
 import com.example.telegramclone.R
 import com.example.telegramclone.activities.RegisterActivity
-import com.example.telegramclone.utilits.*
+import com.example.telegramclone.utilits.AppTextWatcher
+import com.example.telegramclone.utilits.signIn
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.fragment_enter_code.*
 
@@ -25,27 +25,7 @@ class EnterCodeFragment(private val phoneNumber: String, val id: String) :
     private fun enterCode() {
         val code = register_input_code.text.toString()
         val credential = PhoneAuthProvider.getCredential(id, code)
-        AUTH.signInWithCredential(credential).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val uid = AUTH.currentUser?.uid.toString()
-                val dateMap = mutableMapOf<String, Any>()
-                dateMap[CHILD_ID] = uid
-                dateMap[CHILD_PHONE] = phoneNumber
-                dateMap[CHILD_USERNAME] = uid
-
-                REF_DATABASE_ROOT.child(NODE_PHONES).child(phoneNumber).setValue(uid)
-                    .addOnFailureListener { showToast(it.message.toString()) }
-                    .addOnSuccessListener {
-                        REF_DATABASE_ROOT.child(NODE_USER).child(uid).updateChildren(dateMap)
-                            .addOnSuccessListener {
-                                showToast("Добро пожаловать")
-                                (activity as RegisterActivity).replaceActivity(MainActivity())
-                            }
-                            .addOnFailureListener { showToast(it.message.toString()) }
-                    }
-            } else {
-                showToast(task.exception?.message.toString())
-            }
-        }
+        signIn(credential, phoneNumber)
     }
 }
+
