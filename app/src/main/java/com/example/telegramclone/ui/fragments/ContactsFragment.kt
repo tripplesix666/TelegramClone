@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.telegramclone.R
+import com.example.telegramclone.utilits.APP_ACTIVITY
 
 
 class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
@@ -16,5 +17,10 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_contacts, container, false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        APP_ACTIVITY.title = "Контакты"
     }
 }
