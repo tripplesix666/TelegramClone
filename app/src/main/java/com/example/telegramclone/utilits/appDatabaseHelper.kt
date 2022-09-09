@@ -128,7 +128,7 @@ fun signInForNewUsers(credential: PhoneAuthCredential, phoneNumber: String) {
             dateMap[CHILD_ID] = uid
             dateMap[CHILD_PHONE] = phoneNumber
             dateMap[CHILD_USERNAME] = uid
-            dateMap[CHILD_FULL_NAME] = uid
+            dateMap[CHILD_FULL_NAME] = phoneNumber
 
             REF_DATABASE_ROOT.child(NODE_PHONES).child(phoneNumber).setValue(uid)
                 .addOnFailureListener { showToast(it.message.toString()) }

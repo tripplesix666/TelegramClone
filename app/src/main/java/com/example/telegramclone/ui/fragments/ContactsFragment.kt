@@ -12,7 +12,6 @@ import com.example.telegramclone.models.CommonModel
 import com.example.telegramclone.utilits.*
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.contact_item.view.*
@@ -25,6 +24,8 @@ class ContactsFragment : BaseFragment() {
     private lateinit var adapter: FirebaseRecyclerAdapter<CommonModel, ContactsHolder>
     private lateinit var refContacts: DatabaseReference
     private lateinit var refUsers: DatabaseReference
+    private lateinit var refUsersListener: AppValueEventListener
+    private var mapListeners = hashMapOf<DatabaseReference, AppValueEventListener>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,24 +48,29 @@ class ContactsFragment : BaseFragment() {
         val options = FirebaseRecyclerOptions.Builder<CommonModel>()
             .setQuery(refContacts, CommonModel::class.java)
             .build()
-        adapter = object :FirebaseRecyclerAdapter<CommonModel, ContactsHolder>(options) {
+        adapter = object : FirebaseRecyclerAdapter<CommonModel, ContactsHolder>(options) {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsHolder {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.contact_item, parent, false)
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.contact_item, parent, false)
                 return ContactsHolder(view)
             }
-
+            //Заполняет holder
             override fun onBindViewHolder(
                 holder: ContactsHolder,
                 position: Int,
                 model: CommonModel
             ) {
                 refUsers = REF_DATABASE_ROOT.child(NODE_USER).child(model.id)
-                refUsers.addValueEventListener(AppValueEventListener{
+
+                refUsersListener = AppValueEventListener {
                     val contact = it.getCommonModel()
                     holder.name.text = contact.full_name
                     holder.status.text = contact.state
                     holder.photo.downloadAndSetImage(contact.photoUrl)
-                })
+                }
+
+                refUsers.addValueEventListener(refUsersListener)
+                mapListeners[refUsers] = refUsersListener
             }
         }
         recyclerView.adapter = adapter
@@ -80,6 +86,9 @@ class ContactsFragment : BaseFragment() {
     override fun onPause() {
         super.onPause()
         adapter.stopListening()
+        mapListeners.forEach {
+            it.key.removeEventListener(it.value)
+        }
     }
 }
 
