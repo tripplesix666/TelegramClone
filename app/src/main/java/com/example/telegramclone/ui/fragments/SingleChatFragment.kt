@@ -39,6 +39,16 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
         }
         refUser = REF_DATABASE_ROOT.child(NODE_USER).child(contact.id)
         refUser.addValueEventListener(listenerInfoToolbar)
+        binding.chatBtnSendMessage.setOnClickListener {
+            val message = binding.chatInputMessage.text.toString()
+            if (message.isEmpty()) {
+                showToast("Нечего отправлять")
+            } else {
+                 sendMessage(message, contact.id, TYPE_TEXT) {
+                     binding.chatInputMessage.setText("")
+                 }
+            }
+        }
     }
 
     private fun initInfoToolbar() {
