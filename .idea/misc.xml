@@ -3,13 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/drawable/bg_receiving_message.xml" value="0.2415" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/drawable/bg_user_message.xml" value="0.2415" />
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/drawable/header.xml" value="0.1035" />
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/drawable/ic_baseline_photo_camera_24.xml" value="0.172" />
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/drawable/ic_btn_action_menu.xml" value="0.172" />
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/drawable/ic_btn_action_menu_change_name.xml" value="0.172" />
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/drawable/ic_default_photo.xml" value="0.2415" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/drawable/ic_default_photo_accent.xml" value="0.2415" />
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/drawable/ripple_effect.xml" value="0.172" />
-        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/activity_register.xml" value="0.36666666666666664" />
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/contact_item.xml" value="0.23783783783783785" />
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/fragment_base_change.xml" value="0.2287162162162162" />
@@ -22,6 +25,9 @@
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/fragment_enter_code.xml" value="0.36666666666666664" />
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/fragment_enter_phone_number.xml" value="0.36666666666666664" />
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/fragment_single_chat.xml" value="0.23783783783783785" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/message_item.xml" value="0.23716216216216215" />
+        <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/layout/toolbar_info.xml" value="0.23783783783783785" />
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/menu/settings_action_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/menu/settings_crope_image.xml" value="0.23716216216216215" />
         <entry key="..\:/Save/AS/TelegramClone/app/src/main/res/menu/settings_menu_confirm.xml" value="0.23783783783783785" />

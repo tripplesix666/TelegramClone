@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/blue_200"
         android:src="@drawable/ic_btn_next"
-        android:layout_marginEnd="@dimen/horizontal_margin"
+        android:layout_marginEnd="@dimen/app_margin"
         android:layout_marginBottom="@dimen/vertical_large_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
