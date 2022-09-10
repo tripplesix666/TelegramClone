@@ -64,10 +64,13 @@ class ContactsFragment : BaseFragment() {
 
                 refUsersListener = AppValueEventListener {
                     val contact = it.getCommonModel()
-                    holder.name.text = contact.full_name
+                    if (contact.full_name == contact.phone) {
+                        holder.name.text = model.full_name
+                    } else holder.name.text = contact.full_name
+//                    holder.name.text = contact.full_name
                     holder.status.text = contact.state
                     holder.photo.downloadAndSetImage(contact.photoUrl)
-                    holder.itemView.setOnClickListener { replaceFragment(SingleChatFragment(contact)) }
+                    holder.itemView.setOnClickListener { replaceFragment(SingleChatFragment(model)) }
                 }
 
                 refUsers.addValueEventListener(refUsersListener)
