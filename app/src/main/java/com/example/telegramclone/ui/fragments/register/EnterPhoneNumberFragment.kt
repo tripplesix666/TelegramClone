@@ -1,8 +1,9 @@
-package com.example.telegramclone.ui.fragments
+package com.example.telegramclone.ui.fragments.register
 
 import androidx.fragment.app.Fragment
 import com.example.telegramclone.R
-import com.example.telegramclone.activities.RegisterActivity
+import com.example.telegramclone.database.AUTH
+import com.example.telegramclone.database.signIn
 import com.example.telegramclone.utilits.*
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
@@ -50,7 +51,7 @@ class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) 
         val option = PhoneAuthOptions.newBuilder(AUTH)
             .setPhoneNumber(phoneNumber)
             .setTimeout(60L, TimeUnit.SECONDS)
-            .setActivity(activity as RegisterActivity)
+            .setActivity(APP_ACTIVITY)
             .setCallbacks(callBacks)
             .build()
         PhoneAuthProvider.verifyPhoneNumber(option)

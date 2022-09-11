@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.telegramclone.R
+import com.example.telegramclone.database.*
 import com.example.telegramclone.databinding.FragmentContactsBinding
 import com.example.telegramclone.models.CommonModel
 import com.example.telegramclone.ui.fragments.single_chat.SingleChatFragment
@@ -55,6 +56,7 @@ class ContactsFragment : BaseFragment() {
                     .inflate(R.layout.contact_item, parent, false)
                 return ContactsHolder(view)
             }
+
             //Заполняет holder
             override fun onBindViewHolder(
                 holder: ContactsHolder,

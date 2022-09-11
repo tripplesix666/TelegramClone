@@ -2,7 +2,7 @@ package com.example.telegramclone.ui.fragments
 
 import android.os.Bundle
 import android.view.*
-import com.example.telegramclone.R
+import com.example.telegramclone.database.*
 import com.example.telegramclone.databinding.FragmentChangeUsernameBinding
 import com.example.telegramclone.utilits.*
 
@@ -46,33 +46,7 @@ class ChangeUsernameFragment : BaseChangeFragment() {
         REF_DATABASE_ROOT.child(NODE_USERNAMES).child(newUsername).setValue(CURRENT_UID)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    updateCurrentUsername()
-                }
-            }
-    }
-
-    private fun updateCurrentUsername() {
-        REF_DATABASE_ROOT.child(NODE_USER).child(CURRENT_UID).child(CHILD_USERNAME)
-            .setValue(newUsername)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    showToast(getString(R.string.toast_data_update))
-                    deleteOldUsername()
-                } else {
-                    showToast(it.exception.toString())
-                }
-            }
-    }
-
-    private fun deleteOldUsername() {
-        REF_DATABASE_ROOT.child(NODE_USERNAMES).child(USER.username).removeValue()
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    showToast(getString(R.string.toast_data_update))
-                    fragmentManager?.popBackStack()
-                    USER.username = newUsername
-                } else {
-                    showToast(it.exception.toString())
+                    updateCurrentUsername(newUsername)
                 }
             }
     }

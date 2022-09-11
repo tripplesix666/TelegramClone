@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.telegramclone.R
+import com.example.telegramclone.database.USER
+import com.example.telegramclone.database.setNameToDatabase
 import com.example.telegramclone.databinding.FragmentChangeNameBinding
 import com.example.telegramclone.utilits.*
 
@@ -44,17 +46,7 @@ class ChangeNameFragment : BaseChangeFragment() {
             showToast(getString(R.string.settings_toast_enter_name))
         } else {
             val fullName = "$name $surname"
-            REF_DATABASE_ROOT.child(NODE_USER).child(CURRENT_UID).child(CHILD_FULL_NAME)
-                .setValue(fullName).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        showToast(getString(R.string.toast_data_update))
-                        USER.full_name = fullName
-                        APP_ACTIVITY.appDrawer.updateHeader()
-                        fragmentManager?.popBackStack()
-                    }
-                }
+            setNameToDatabase(fullName)
         }
     }
-
-
 }

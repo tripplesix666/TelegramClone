@@ -4,10 +4,11 @@ import androidx.fragment.app.Fragment
 import com.example.telegramclone.R
 import com.example.telegramclone.utilits.APP_ACTIVITY
 
-class ChatsFragment : Fragment(R.layout.fragment_chats) {
+class MainFragment : Fragment(R.layout.fragment_chats) {
 
     override fun onResume() {
         super.onResume()
-        APP_ACTIVITY.title = "Чаты"
+        APP_ACTIVITY.title = "Telegram"
+        APP_ACTIVITY.appDrawer.enableDrawer()
     }
 }

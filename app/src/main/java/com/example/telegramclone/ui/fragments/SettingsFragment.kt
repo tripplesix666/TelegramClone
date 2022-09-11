@@ -6,7 +6,7 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import com.example.telegramclone.R
-import com.example.telegramclone.activities.RegisterActivity
+import com.example.telegramclone.database.*
 import com.example.telegramclone.databinding.FragmentSettingsBinding
 import com.example.telegramclone.utilits.*
 
@@ -92,7 +92,7 @@ class SettingsFragment : BaseFragment() {
             R.id.settings_menu_exit -> {
                 AppStates.updateState(AppStates.OFFLINE)
                 AUTH.signOut()
-                APP_ACTIVITY.replaceActivity(RegisterActivity())
+                restartActivity()
             }
             R.id.settings_menu_change_name -> replaceFragment(ChangeNameFragment())
         }

@@ -8,11 +8,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.telegramclone.R
 import com.example.telegramclone.models.CommonModel
-import com.example.telegramclone.utilits.CURRENT_UID
+import com.example.telegramclone.database.CURRENT_UID
 import com.example.telegramclone.utilits.asTime
 import kotlinx.android.synthetic.main.message_item.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 class SingleChatAdapter : RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder>() {
 
