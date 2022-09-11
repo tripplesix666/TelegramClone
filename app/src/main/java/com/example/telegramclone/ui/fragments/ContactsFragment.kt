@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.telegramclone.R
 import com.example.telegramclone.databinding.FragmentContactsBinding
 import com.example.telegramclone.models.CommonModel
+import com.example.telegramclone.ui.fragments.single_chat.SingleChatFragment
 import com.example.telegramclone.utilits.*
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions

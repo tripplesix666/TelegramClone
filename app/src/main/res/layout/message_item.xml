@@ -29,7 +29,7 @@
             tools:text="Привет Я Никита" />
 
         <TextView
-            android:id="@+id/_chat_user_message_time"
+            android:id="@+id/chat_user_message_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
