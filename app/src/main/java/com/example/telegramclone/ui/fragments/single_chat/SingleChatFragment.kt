@@ -8,6 +8,9 @@ import android.widget.AbsListView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageView
+import com.canhub.cropper.options
 import com.example.telegramclone.database.*
 import com.example.telegramclone.databinding.FragmentSingleChatBinding
 import com.example.telegramclone.models.CommonModel
@@ -16,6 +19,7 @@ import com.example.telegramclone.ui.fragments.BaseFragment
 import com.example.telegramclone.utilits.*
 import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.fragment_single_chat.*
 import kotlinx.android.synthetic.main.toolbar_info.view.*
 
 class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
@@ -34,6 +38,33 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
     private var smoothScrollToPosition = true
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var layoutManager: LinearLayoutManager
+
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            // use the returned uri
+            val messageKey = REF_DATABASE_ROOT
+                .child(NODE_MESSAGES)
+                .child(CURRENT_UID)
+                .child(contact.id)
+                .push().key.toString()
+
+            val uriContent = result.uriContent
+            val path = REF_STORAGE_ROOT
+                .child(FOLDER_MESSAGE_IMAGE)
+                .child(messageKey)
+
+            uriContent?.let { it ->
+                putImageToStorage(it, path) {
+                    getUrlFromStorage(path) { url ->
+                        sendMessageAsImage(contact.id, url, messageKey)
+                    }
+                }
+            }
+        } else {
+            // an error occurred
+            val exception = result.error
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +86,28 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
         layoutManager = LinearLayoutManager(this.context)
         toolbarInfo = APP_ACTIVITY.toolbar.toolbar_info
         toolbarInfo.visibility = View.VISIBLE
+        binding.chatInputMessage.addTextChangedListener(AppTextWatcher {
+            val string = binding.chatInputMessage.text.toString()
+            if (string.isEmpty()) {
+                binding.chatBtnSendMessage.visibility = View.GONE
+                binding.chatBtnAttach.visibility = View.VISIBLE
+            } else {
+                binding.chatBtnSendMessage.visibility = View.VISIBLE
+                binding.chatBtnAttach.visibility = View.GONE
+            }
+        })
+        binding.chatBtnAttach.setOnClickListener { attachFile() }
+    }
+
+    private fun attachFile() {
+        cropImage.launch(
+            options() {
+                setGuidelines(CropImageView.Guidelines.ON)
+                setAspectRatio(1, 1)
+                setRequestedSize(250, 250)
+            }
+
+        )
     }
 
     private fun initRecyclerView() {

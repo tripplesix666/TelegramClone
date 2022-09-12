@@ -4,10 +4,7 @@ import android.net.Uri
 import com.example.telegramclone.R
 import com.example.telegramclone.models.CommonModel
 import com.example.telegramclone.models.UserModel
-import com.example.telegramclone.utilits.APP_ACTIVITY
-import com.example.telegramclone.utilits.AppValueEventListener
-import com.example.telegramclone.utilits.restartActivity
-import com.example.telegramclone.utilits.showToast
+import com.example.telegramclone.utilits.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.database.DataSnapshot
@@ -32,6 +29,7 @@ const val NODE_PHONES_CONTACTS = "phones_contacts"
 const val NODE_MESSAGES = "messages"
 
 const val FOLDER_PROFILE_IMAGE = "profile_image"
+const val FOLDER_MESSAGE_IMAGE = "message_image"
 
 const val CHILD_ID = "id"
 const val CHILD_PHONE = "phone"
@@ -40,11 +38,11 @@ const val CHILD_FULL_NAME = "full_name"
 const val CHILD_BIO = "bio"
 const val CHILD_PHOTO_URL = "photoUrl"
 const val CHILD_STATE = "state"
-
 const val CHILD_TEXT = "text"
 const val CHILD_TYPE = "type"
 const val CHILD_FROM = "from"
 const val CHILD_TIMESTAMP = "timeStamp"
+const val CHILD_IMAGE_URL = "imageUrl"
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
@@ -180,7 +178,6 @@ fun signIn(credential: PhoneAuthCredential, phoneNumber: String) {
 }
 
 fun sendMessage(message: String, receivingUserId: String, typeText: String, function: () -> Unit) {
-
     val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"
     val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"
     val messageKey = REF_DATABASE_ROOT.child(refDialogUser).push().key
@@ -199,6 +196,26 @@ fun sendMessage(message: String, receivingUserId: String, typeText: String, func
     REF_DATABASE_ROOT
         .updateChildren(mapDialog)
         .addOnSuccessListener { function() }
+        .addOnFailureListener { showToast(it.message.toString()) }
+}
+
+fun sendMessageAsImage(receivingUserId: String, imageUrl: String, messageKey: String) {
+    val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"
+    val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"
+
+    val mapMessage = hashMapOf<String, Any>()
+    mapMessage[CHILD_FROM] = CURRENT_UID
+    mapMessage[CHILD_ID] = messageKey
+    mapMessage[CHILD_TYPE] = TYPE_MESSAGE_IMAGE
+    mapMessage[CHILD_TIMESTAMP] = ServerValue.TIMESTAMP
+    mapMessage[CHILD_IMAGE_URL] = imageUrl
+
+    val mapDialog = hashMapOf<String, Any>()
+    mapDialog["$refDialogUser/$messageKey"] = mapMessage
+    mapDialog["$refDialogReceivingUser/$messageKey"] = mapMessage
+
+    REF_DATABASE_ROOT
+        .updateChildren(mapDialog)
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
