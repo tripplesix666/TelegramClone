@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.telegramclone.database.*
@@ -28,10 +29,11 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
     private lateinit var adapter: SingleChatAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var messageListener: AppChildEventListener
-    private var countMessages = 10
+    private var countMessages = 15
     private var isScrolling = false
     private var smoothScrollToPosition = true
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var layoutManager: LinearLayoutManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,11 +45,16 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        swipeRefreshLayout = binding.chatSwipeRefresh
-        toolbarInfo = APP_ACTIVITY.toolbar.toolbar_info
-        toolbarInfo.visibility = View.VISIBLE
+        initFields()
         initToolbar()
         initRecyclerView()
+    }
+
+    private fun initFields() {
+        swipeRefreshLayout = binding.chatSwipeRefresh
+        layoutManager = LinearLayoutManager(this.context)
+        toolbarInfo = APP_ACTIVITY.toolbar.toolbar_info
+        toolbarInfo.visibility = View.VISIBLE
     }
 
     private fun initRecyclerView() {
@@ -57,14 +64,22 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
             .child(NODE_MESSAGES)
             .child(CURRENT_UID)
             .child(contact.id)
+
         recyclerView.adapter = adapter
+        recyclerView.layoutManager = layoutManager
+        recyclerView.setHasFixedSize(true)
+        recyclerView.isNestedScrollingEnabled = false
 
         messageListener = AppChildEventListener {
-            adapter.addItem(it.getCommonModel(), smoothScrollToPosition) {
-                if (smoothScrollToPosition) {
+            val message = it.getCommonModel()
+            if (smoothScrollToPosition) {
+                adapter.addItemToBottom(message) {
                     recyclerView.smoothScrollToPosition(adapter.itemCount)
                 }
-                swipeRefreshLayout.isRefreshing = false
+            } else {
+                adapter.addItemToTop(message) {
+                    swipeRefreshLayout.isRefreshing = false
+                }
             }
         }
 
@@ -80,7 +95,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (isScrolling && dy < 0) {
+                if (isScrolling && dy < 0 && layoutManager.findFirstVisibleItemPosition() <= 3) {
                     updateData()
                 }
 
@@ -102,8 +117,12 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
             receivingUser = it.getUserModel()
             initInfoToolbar()
         }
-        refUser = REF_DATABASE_ROOT.child(NODE_USER).child(contact.id)
+        refUser = REF_DATABASE_ROOT
+            .child(NODE_USER)
+            .child(contact.id)
+
         refUser.addValueEventListener(listenerInfoToolbar)
+
         binding.chatBtnSendMessage.setOnClickListener {
             smoothScrollToPosition = true
             val message = binding.chatInputMessage.text.toString()
