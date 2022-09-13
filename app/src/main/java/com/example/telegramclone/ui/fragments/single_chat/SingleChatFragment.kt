@@ -57,6 +57,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
                 putImageToStorage(it, path) {
                     getUrlFromStorage(path) { url ->
                         sendMessageAsImage(contact.id, url, messageKey)
+                        smoothScrollToPosition = true
                     }
                 }
             }

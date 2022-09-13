@@ -166,6 +166,7 @@ fun signIn(credential: PhoneAuthCredential, phoneNumber: String) {
     REF_DATABASE_ROOT
         .child(NODE_PHONES)
         .addListenerForSingleValueEvent(AppValueEventListener {
+
             it.children.forEach { snapshot ->
                 listOfPhones.add(snapshot.key.toString())
             }
