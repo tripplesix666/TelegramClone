@@ -22,7 +22,7 @@ lateinit var USER: UserModel
 
 const val TYPE_TEXT = "text"
 
-const val NODE_USER = "users"
+const val NODE_USERS = "users"
 const val NODE_USERNAMES = "usernames"
 const val NODE_PHONES = "phones"
 const val NODE_PHONES_CONTACTS = "phones_contacts"
@@ -53,7 +53,7 @@ fun initFirebase() {
 }
 
 inline fun putUrlToDatabase(url: String, crossinline function: () -> Unit) {
-    REF_DATABASE_ROOT.child(NODE_USER)
+    REF_DATABASE_ROOT.child(NODE_USERS)
         .child(CURRENT_UID)
         .child(CHILD_PHOTO_URL)
         .setValue(url)
@@ -75,7 +75,7 @@ inline fun putImageToStorage(it: Uri, path: StorageReference, crossinline functi
 
 inline fun initUser(crossinline function: () -> Unit) {
     REF_DATABASE_ROOT
-        .child(NODE_USER)
+        .child(NODE_USERS)
         .child(CURRENT_UID)
         .addListenerForSingleValueEvent(AppValueEventListener {
             USER = it.getValue(UserModel::class.java) ?: UserModel()
@@ -121,61 +121,41 @@ fun DataSnapshot.getCommonModel(): CommonModel =
 fun DataSnapshot.getUserModel(): UserModel =
     this.getValue(UserModel::class.java) ?: UserModel()
 
-fun signInForNewUsers(credential: PhoneAuthCredential, phoneNumber: String) {
+fun signIn(credential: PhoneAuthCredential, phoneNumber: String) {
     AUTH.signInWithCredential(credential)
         .addOnSuccessListener {
             val uid = AUTH.currentUser?.uid.toString()
             val dateMap = mutableMapOf<String, Any>()
             dateMap[CHILD_ID] = uid
             dateMap[CHILD_PHONE] = phoneNumber
-            dateMap[CHILD_USERNAME] = uid
             dateMap[CHILD_FULL_NAME] = phoneNumber
 
-            REF_DATABASE_ROOT
-                .child(NODE_PHONES)
-                .child(phoneNumber)
-                .setValue(uid)
-                .addOnFailureListener { showToast(it.message.toString()) }
-                .addOnSuccessListener {
+            REF_DATABASE_ROOT.child(NODE_USERS).child(uid)
+                .addListenerForSingleValueEvent(AppValueEventListener {
+
+                    if (!it.hasChild(CHILD_USERNAME)) {
+                        dateMap[CHILD_USERNAME] = uid
+                    }
+
                     REF_DATABASE_ROOT
-                        .child(NODE_USER)
-                        .child(uid)
-                        .updateChildren(dateMap)
-                        .addOnSuccessListener {
-                            showToast("Добро пожаловать")
-                            restartActivity()
-                        }
+                        .child(NODE_PHONES)
+                        .child(phoneNumber)
+                        .setValue(uid)
                         .addOnFailureListener { showToast(it.message.toString()) }
-                }
+                        .addOnSuccessListener {
+                            REF_DATABASE_ROOT
+                                .child(NODE_USERS)
+                                .child(uid)
+                                .updateChildren(dateMap)
+                                .addOnSuccessListener {
+                                    showToast("Добро пожаловать")
+                                    restartActivity()
+                                }
+                                .addOnFailureListener { showToast(it.message.toString()) }
+                        }
+                })
         }
         .addOnFailureListener { showToast(it.message.toString()) }
-}
-
-
-fun signInForOldUsers(credential: PhoneAuthCredential) {
-    AUTH.signInWithCredential(credential)
-        .addOnSuccessListener {
-            showToast("Добро пожаловать снова")
-            restartActivity()
-        }
-        .addOnFailureListener { showToast(it.message.toString()) }
-}
-
-fun signIn(credential: PhoneAuthCredential, phoneNumber: String) {
-    val listOfPhones = mutableListOf<String>()
-    REF_DATABASE_ROOT
-        .child(NODE_PHONES)
-        .addListenerForSingleValueEvent(AppValueEventListener {
-
-            it.children.forEach { snapshot ->
-                listOfPhones.add(snapshot.key.toString())
-            }
-            if (listOfPhones.contains(phoneNumber)) {
-                signInForOldUsers(credential)
-            } else {
-                signInForNewUsers(credential, phoneNumber)
-            }
-        })
 }
 
 fun sendMessage(message: String, receivingUserId: String, typeText: String, function: () -> Unit) {
@@ -222,7 +202,7 @@ fun sendMessageAsImage(receivingUserId: String, imageUrl: String, messageKey: St
 
 fun updateCurrentUsername(newUsername: String) {
     REF_DATABASE_ROOT
-        .child(NODE_USER)
+        .child(NODE_USERS)
         .child(CURRENT_UID)
         .child(CHILD_USERNAME)
         .setValue(newUsername)
@@ -245,7 +225,7 @@ private fun deleteOldUsername(newUsername: String) {
 
 fun setBioToDataBase(newBio: String) {
     REF_DATABASE_ROOT
-        .child(NODE_USER)
+        .child(NODE_USERS)
         .child(CURRENT_UID)
         .child(CHILD_BIO)
         .setValue(newBio)
@@ -260,7 +240,7 @@ fun setBioToDataBase(newBio: String) {
 
 fun setNameToDatabase(fullName: String) {
     REF_DATABASE_ROOT
-        .child(NODE_USER)
+        .child(NODE_USERS)
         .child(CURRENT_UID)
         .child(CHILD_FULL_NAME)
         .setValue(fullName)

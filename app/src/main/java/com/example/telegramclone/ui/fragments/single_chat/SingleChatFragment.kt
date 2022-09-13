@@ -1,16 +1,20 @@
 package com.example.telegramclone.ui.fragments.single_chat
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
+import com.example.telegramclone.R
 import com.example.telegramclone.database.*
 import com.example.telegramclone.databinding.FragmentSingleChatBinding
 import com.example.telegramclone.models.CommonModel
@@ -19,8 +23,10 @@ import com.example.telegramclone.ui.fragments.BaseFragment
 import com.example.telegramclone.utilits.*
 import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.activity_main.view.*
-import kotlinx.android.synthetic.main.fragment_single_chat.*
 import kotlinx.android.synthetic.main.toolbar_info.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
@@ -82,6 +88,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
         initRecyclerView()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initFields() {
         swipeRefreshLayout = binding.chatSwipeRefresh
         layoutManager = LinearLayoutManager(this.context)
@@ -89,15 +96,34 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
         toolbarInfo.visibility = View.VISIBLE
         binding.chatInputMessage.addTextChangedListener(AppTextWatcher {
             val string = binding.chatInputMessage.text.toString()
-            if (string.isEmpty()) {
+            if (string.isEmpty() || string == "Запись") {
                 binding.chatBtnSendMessage.visibility = View.GONE
                 binding.chatBtnAttach.visibility = View.VISIBLE
+                binding.chatBtnVoice.visibility = View.VISIBLE
             } else {
                 binding.chatBtnSendMessage.visibility = View.VISIBLE
                 binding.chatBtnAttach.visibility = View.GONE
+                binding.chatBtnVoice.visibility = View.GONE
             }
         })
         binding.chatBtnAttach.setOnClickListener { attachFile() }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            binding.chatBtnVoice.setOnTouchListener { view, motionEvent ->
+                if (checkPermission(RECORD_AUDIO)) {
+                    if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                        //TODO record
+                        binding.chatInputMessage.setText("Запись")
+                        binding.chatBtnVoice.setColorFilter(ContextCompat.getColor(APP_ACTIVITY, R.color.blue))
+                    } else if (motionEvent.action == MotionEvent.ACTION_UP)
+                    //TODO stop record
+                        binding.chatInputMessage.setText("")
+                    binding.chatBtnVoice.colorFilter = null
+                }
+                true
+            }
+        }
+
     }
 
     private fun attachFile() {
@@ -172,7 +198,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
             initInfoToolbar()
         }
         refUser = REF_DATABASE_ROOT
-            .child(NODE_USER)
+            .child(NODE_USERS)
             .child(contact.id)
 
         refUser.addValueEventListener(listenerInfoToolbar)

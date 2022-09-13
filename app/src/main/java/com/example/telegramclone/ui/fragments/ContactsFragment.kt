@@ -63,7 +63,7 @@ class ContactsFragment : BaseFragment() {
                 position: Int,
                 model: CommonModel
             ) {
-                refUsers = REF_DATABASE_ROOT.child(NODE_USER).child(model.id)
+                refUsers = REF_DATABASE_ROOT.child(NODE_USERS).child(model.id)
 
                 refUsersListener = AppValueEventListener {
                     val contact = it.getCommonModel()
