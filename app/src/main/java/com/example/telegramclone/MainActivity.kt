@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        APP_ACTIVITY =  this
+        APP_ACTIVITY = this
         initFirebase()
         initUser {
             CoroutineScope(Dispatchers.IO).launch {
@@ -71,11 +71,14 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (ContextCompat.checkSelfPermission(APP_ACTIVITY, READ_CONTACTS) == PackageManager.PERMISSION_GRANTED)
+        if (ContextCompat.checkSelfPermission(
+                APP_ACTIVITY,
+                READ_CONTACTS
+            ) == PackageManager.PERMISSION_GRANTED
+        )
             CoroutineScope(Dispatchers.IO).launch {
                 initContacts()
             }
+
     }
-
-
 }

@@ -51,19 +51,11 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
         if (result.isSuccessful) {
             // use the returned uri
             val messageKey = getMessageKey(contact.id)
-
             val uriContent = result.uriContent
-            val path = REF_STORAGE_ROOT
-                .child(FOLDER_MESSAGE_IMAGE)
-                .child(messageKey)
 
-            uriContent?.let { it ->
-                putImageToStorage(it, path) {
-                    getUrlFromStorage(path) { url ->
-                        sendMessageAsImage(contact.id, url, messageKey)
-                        smoothScrollToPosition = true
-                    }
-                }
+            uriContent?.let { uri ->
+                uploadFileToStorage(uri, messageKey, contact.id, TYPE_MESSAGE_IMAGE)
+                smoothScrollToPosition = true
             }
         } else {
             // an error occurred
@@ -120,17 +112,18 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
                                 R.color.blue
                             )
                         )
-                    } else if (motionEvent.action == MotionEvent.ACTION_UP)
+                    } else if (motionEvent.action == MotionEvent.ACTION_UP) {
+                        binding.chatInputMessage.setText("")
+                        binding.chatBtnVoice.colorFilter = null
                         appVoiceRecorder.stopRecord { file, messageKey ->
-                            uploadFileToStorage(Uri.fromFile(file), messageKey)
+                            uploadFileToStorage(Uri.fromFile(file), messageKey, contact.id, TYPE_MESSAGE_VOICE)
+                            smoothScrollToPosition = true
                         }
-                    binding.chatInputMessage.setText("")
-                    binding.chatBtnVoice.colorFilter = null
+                    }
                 }
                 true
             }
         }
-
     }
 
     private fun attachFile() {

@@ -22,7 +22,7 @@ class SettingsFragment : BaseFragment() {
                 .child(CURRENT_UID)
 
             uriContent?.let { it ->
-                putImageToStorage(it, path) {
+                putFileToStorage(it, path) {
                     getUrlFromStorage(path) { url ->
                         putUrlToDatabase(url) {
                             binding.settingsUserPhotoImageView.downloadAndSetImage(url)

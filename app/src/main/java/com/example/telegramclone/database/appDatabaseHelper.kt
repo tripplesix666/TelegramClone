@@ -29,7 +29,7 @@ const val NODE_PHONES_CONTACTS = "phones_contacts"
 const val NODE_MESSAGES = "messages"
 
 const val FOLDER_PROFILE_IMAGE = "profile_image"
-const val FOLDER_MESSAGE_IMAGE = "message_image"
+const val FOLDER_FILES = "messages_files"
 
 const val CHILD_ID = "id"
 const val CHILD_PHONE = "phone"
@@ -67,7 +67,7 @@ inline fun getUrlFromStorage(path: StorageReference, crossinline function: (url:
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
-inline fun putImageToStorage(it: Uri, path: StorageReference, crossinline function: () -> Unit) {
+inline fun putFileToStorage(it: Uri, path: StorageReference, crossinline function: () -> Unit) {
     path.putFile(it)
         .addOnSuccessListener { function() }
         .addOnFailureListener { showToast(it.message.toString()) }
@@ -180,16 +180,21 @@ fun sendMessage(message: String, receivingUserId: String, typeText: String, func
         .addOnFailureListener { showToast(it.message.toString()) }
 }
 
-fun sendMessageAsImage(receivingUserId: String, imageUrl: String, messageKey: String) {
+fun sendMessageAsFile(
+    receivingUserId: String,
+    fileUrl: String,
+    messageKey: String,
+    typeMessage: String
+) {
     val refDialogUser = "$NODE_MESSAGES/$CURRENT_UID/$receivingUserId"
     val refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserId/$CURRENT_UID"
 
     val mapMessage = hashMapOf<String, Any>()
     mapMessage[CHILD_FROM] = CURRENT_UID
     mapMessage[CHILD_ID] = messageKey
-    mapMessage[CHILD_TYPE] = TYPE_MESSAGE_IMAGE
+    mapMessage[CHILD_TYPE] = typeMessage
     mapMessage[CHILD_TIMESTAMP] = ServerValue.TIMESTAMP
-    mapMessage[CHILD_FILE_URL] = imageUrl
+    mapMessage[CHILD_FILE_URL] = fileUrl
 
     val mapDialog = hashMapOf<String, Any>()
     mapDialog["$refDialogUser/$messageKey"] = mapMessage
@@ -259,7 +264,14 @@ fun getMessageKey(id: String) = REF_DATABASE_ROOT
     .child(id)
     .push().key.toString()
 
-fun uploadFileToStorage(uri: Uri, messageKey: String) {
-    showToast("Record ok")
+fun uploadFileToStorage(uri: Uri, messageKey: String, receivedId: String, typeMessage: String) {
+    val path = REF_STORAGE_ROOT
+        .child(FOLDER_FILES)
+        .child(messageKey)
+    putFileToStorage(uri, path) {
+        getUrlFromStorage(path) { url ->
+            sendMessageAsFile(receivedId, url, messageKey, typeMessage)
+        }
+    }
 }
 
