@@ -1,6 +1,7 @@
 package com.example.telegramclone.ui.fragments.single_chat
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -44,15 +45,12 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
     private var smoothScrollToPosition = true
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var appVoiceRecorder: AppVoiceRecorder
 
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
             // use the returned uri
-            val messageKey = REF_DATABASE_ROOT
-                .child(NODE_MESSAGES)
-                .child(CURRENT_UID)
-                .child(contact.id)
-                .push().key.toString()
+            val messageKey = getMessageKey(contact.id)
 
             val uriContent = result.uriContent
             val path = REF_STORAGE_ROOT
@@ -90,6 +88,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initFields() {
+        appVoiceRecorder = AppVoiceRecorder()
         swipeRefreshLayout = binding.chatSwipeRefresh
         layoutManager = LinearLayoutManager(this.context)
         toolbarInfo = APP_ACTIVITY.toolbar.toolbar_info
@@ -112,12 +111,20 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
             binding.chatBtnVoice.setOnTouchListener { view, motionEvent ->
                 if (checkPermission(RECORD_AUDIO)) {
                     if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                        //TODO record
+                        val messageKey = getMessageKey(contact.id)
+                        appVoiceRecorder.startRecord(messageKey)
                         binding.chatInputMessage.setText("Запись")
-                        binding.chatBtnVoice.setColorFilter(ContextCompat.getColor(APP_ACTIVITY, R.color.blue))
+                        binding.chatBtnVoice.setColorFilter(
+                            ContextCompat.getColor(
+                                APP_ACTIVITY,
+                                R.color.blue
+                            )
+                        )
                     } else if (motionEvent.action == MotionEvent.ACTION_UP)
-                    //TODO stop record
-                        binding.chatInputMessage.setText("")
+                        appVoiceRecorder.stopRecord { file, messageKey ->
+                            uploadFileToStorage(Uri.fromFile(file), messageKey)
+                        }
+                    binding.chatInputMessage.setText("")
                     binding.chatBtnVoice.colorFilter = null
                 }
                 true
@@ -231,5 +238,10 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
         toolbarInfo.visibility = View.GONE
         refUser.removeEventListener(listenerInfoToolbar)
         refMessage.removeEventListener(messageListener)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        appVoiceRecorder.releaseRecorder()
     }
 }

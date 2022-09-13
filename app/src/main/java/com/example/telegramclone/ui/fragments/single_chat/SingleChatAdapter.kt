@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.telegramclone.R
 import com.example.telegramclone.database.CURRENT_UID
@@ -60,12 +59,12 @@ class SingleChatAdapter : RecyclerView.Adapter<SingleChatAdapter.SingleChatHolde
         if (listMessagesCache[position].from == CURRENT_UID) {
             holder.blockReceivedImageMessage.visibility = View.GONE
             holder.blockUserImageMessage.visibility = View.VISIBLE
-            holder.chatUserImage.downloadAndSetImage(listMessagesCache[position].imageUrl)
+            holder.chatUserImage.downloadAndSetImage(listMessagesCache[position].fileUrl)
             holder.chatUserImageMessageTime.text = listMessagesCache[position].timeStamp.toString().asTime()
         } else {
             holder.blockReceivedImageMessage.visibility = View.VISIBLE
             holder.blockUserImageMessage.visibility = View.GONE
-            holder.chatReceivedImage.downloadAndSetImage(listMessagesCache[position].imageUrl)
+            holder.chatReceivedImage.downloadAndSetImage(listMessagesCache[position].fileUrl)
             holder.chatReceivedImageMessageTime.text = listMessagesCache[position].timeStamp.toString().asTime()
         }
     }
