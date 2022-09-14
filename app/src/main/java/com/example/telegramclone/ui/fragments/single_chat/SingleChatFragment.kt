@@ -21,6 +21,7 @@ import com.example.telegramclone.databinding.FragmentSingleChatBinding
 import com.example.telegramclone.models.CommonModel
 import com.example.telegramclone.models.UserModel
 import com.example.telegramclone.ui.fragments.BaseFragment
+import com.example.telegramclone.ui.fragments.message_recycler_view.views.AppViewFactory
 import com.example.telegramclone.utilits.*
 import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -153,11 +154,11 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
         messageListener = AppChildEventListener {
             val message = it.getCommonModel()
             if (smoothScrollToPosition) {
-                adapter.addItemToBottom(message) {
+                adapter.addItemToBottom(AppViewFactory.getView(message)) {
                     recyclerView.smoothScrollToPosition(adapter.itemCount)
                 }
             } else {
-                adapter.addItemToTop(message) {
+                adapter.addItemToTop(AppViewFactory.getView(message)) {
                     swipeRefreshLayout.isRefreshing = false
                 }
             }
