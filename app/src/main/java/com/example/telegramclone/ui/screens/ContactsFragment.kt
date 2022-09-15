@@ -1,4 +1,4 @@
-package com.example.telegramclone.ui.fragments
+package com.example.telegramclone.ui.screens
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import com.example.telegramclone.R
 import com.example.telegramclone.database.*
 import com.example.telegramclone.databinding.FragmentContactsBinding
 import com.example.telegramclone.models.CommonModel
-import com.example.telegramclone.ui.fragments.single_chat.SingleChatFragment
+import com.example.telegramclone.ui.screens.single_chat.SingleChatFragment
 import com.example.telegramclone.utilits.*
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions

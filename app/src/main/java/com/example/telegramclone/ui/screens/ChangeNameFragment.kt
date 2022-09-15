@@ -1,4 +1,4 @@
-package com.example.telegramclone.ui.fragments
+package com.example.telegramclone.ui.screens
 
 import android.os.Bundle
 import android.view.LayoutInflater

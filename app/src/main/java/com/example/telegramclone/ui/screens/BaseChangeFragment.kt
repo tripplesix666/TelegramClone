@@ -1,13 +1,10 @@
-package com.example.telegramclone.ui.fragments
+package com.example.telegramclone.ui.screens
 
-import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import com.example.telegramclone.MainActivity
 import com.example.telegramclone.R
 import com.example.telegramclone.utilits.APP_ACTIVITY
 import com.example.telegramclone.utilits.hideKeyboard
-import com.mikepenz.materialize.util.KeyboardUtil.hideKeyboard
 
 open class BaseChangeFragment : Fragment() {
 

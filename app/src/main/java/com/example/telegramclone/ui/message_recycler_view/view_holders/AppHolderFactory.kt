@@ -1,4 +1,4 @@
-package com.example.telegramclone.ui.fragments.message_recycler_view.view_holders
+package com.example.telegramclone.ui.message_recycler_view.view_holders
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.telegramclone.databinding.MessageItemImageBinding
 import com.example.telegramclone.databinding.MessageItemTextBinding
 import com.example.telegramclone.databinding.MessageItemVoiceBinding
-import com.example.telegramclone.ui.fragments.message_recycler_view.views.MessageView
+import com.example.telegramclone.ui.message_recycler_view.views.MessageView
 
 class AppHolderFactory {
 

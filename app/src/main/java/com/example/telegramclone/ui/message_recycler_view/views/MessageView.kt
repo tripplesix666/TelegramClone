@@ -1,4 +1,4 @@
-package com.example.telegramclone.ui.fragments.message_recycler_view.views
+package com.example.telegramclone.ui.message_recycler_view.views
 
 interface MessageView {
     val id: String

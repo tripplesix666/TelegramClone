@@ -1,4 +1,4 @@
-package com.example.telegramclone.ui.fragments.single_chat
+package com.example.telegramclone.ui.screens.single_chat
 
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -20,8 +20,8 @@ import com.example.telegramclone.database.*
 import com.example.telegramclone.databinding.FragmentSingleChatBinding
 import com.example.telegramclone.models.CommonModel
 import com.example.telegramclone.models.UserModel
-import com.example.telegramclone.ui.fragments.BaseFragment
-import com.example.telegramclone.ui.fragments.message_recycler_view.views.AppViewFactory
+import com.example.telegramclone.ui.screens.BaseFragment
+import com.example.telegramclone.ui.message_recycler_view.views.AppViewFactory
 import com.example.telegramclone.utilits.*
 import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -234,8 +234,9 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
         refMessage.removeEventListener(messageListener)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         appVoiceRecorder.releaseRecorder()
+        adapter.onDestroy()
     }
 }
