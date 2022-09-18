@@ -85,6 +85,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/app_small_margin"
+            android:maxLines="2"
             app:layout_constraintBottom_toTopOf="@id/chat_user_file_message_time"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/chat_user_btn_download"

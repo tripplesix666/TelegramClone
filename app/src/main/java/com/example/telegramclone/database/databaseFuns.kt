@@ -256,3 +256,26 @@ fun getFileFromStorage(file: File, fileUrl: String, function: () -> Unit) {
         .addOnSuccessListener { function() }
         .addOnFailureListener { showToast(it.message.toString()) }
 }
+
+fun saveToMainList(id: String, typeChat: String) {
+    val refUser = "$NODE_MAIN_LIST/$CURRENT_UID/$id"
+    val refReceived = "$NODE_MAIN_LIST/$id/$CURRENT_UID"
+
+    val mapUser = hashMapOf<String, Any>()
+    val mapReceived = hashMapOf<String, Any>()
+
+    mapUser[CHILD_ID] = id
+    mapUser[CHILD_TYPE] = typeChat
+
+    mapReceived[CHILD_ID] = CURRENT_UID
+    mapReceived[CHILD_TYPE] = typeChat
+
+    val commonMap = hashMapOf<String, Any>()
+    commonMap[refUser] = mapUser
+    commonMap[refReceived] = mapReceived
+
+    REF_DATABASE_ROOT.updateChildren(commonMap)
+        .addOnFailureListener { showToast(it.message.toString()) }
+
+
+}

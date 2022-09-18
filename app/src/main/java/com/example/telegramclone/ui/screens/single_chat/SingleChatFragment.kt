@@ -251,6 +251,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
                 showToast("Нечего отправлять")
             } else {
                 sendMessage(message, contact.id, TYPE_TEXT) {
+                    saveToMainList(contact.id, TYPE_CHAT)
                     binding.chatInputMessage.setText("")
                 }
             }
