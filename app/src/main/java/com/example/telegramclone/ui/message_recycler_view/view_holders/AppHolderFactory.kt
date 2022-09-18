@@ -3,6 +3,7 @@ package com.example.telegramclone.ui.message_recycler_view.view_holders
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.telegramclone.databinding.MessageItemFileBinding
 import com.example.telegramclone.databinding.MessageItemImageBinding
 import com.example.telegramclone.databinding.MessageItemTextBinding
 import com.example.telegramclone.databinding.MessageItemVoiceBinding
@@ -22,6 +23,11 @@ class AppHolderFactory {
                     val inflater = LayoutInflater.from(parent.context)
                     val binding = MessageItemVoiceBinding.inflate(inflater, parent, false)
                     HolderVoiceMessage(binding)
+                }
+                MessageView.MESSAGE_FILE -> {
+                    val inflater = LayoutInflater.from(parent.context)
+                    val binding = MessageItemFileBinding.inflate(inflater, parent, false)
+                    HolderFileMessage(binding)
                 }
                 else -> {
                     val inflater = LayoutInflater.from(parent.context)

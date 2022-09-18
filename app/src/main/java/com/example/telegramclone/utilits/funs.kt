@@ -3,7 +3,9 @@ package com.example.telegramclone.utilits
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.provider.ContactsContract
+import android.provider.OpenableColumns
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
@@ -13,6 +15,7 @@ import com.example.telegramclone.R
 import com.example.telegramclone.database.updatePhonesToDatabase
 import com.example.telegramclone.models.CommonModel
 import com.squareup.picasso.Picasso
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -86,4 +89,21 @@ fun String.asTime(): String {
     val time = Date(this.toLong())
     val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
     return timeFormat.format(time)
+}
+
+@SuppressLint("Range")
+fun getFileNameFromUri(uri: Uri): String {
+    var result = ""
+    val cursor = APP_ACTIVITY.contentResolver.query(uri, null, null, null, null)
+    try {
+        if (cursor != null && cursor.moveToFirst()) {
+            result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+
+        }
+    } catch (e: Exception) {
+        showToast(e.message.toString())
+    } finally {
+        cursor?.close()
+        return result
+    }
 }
