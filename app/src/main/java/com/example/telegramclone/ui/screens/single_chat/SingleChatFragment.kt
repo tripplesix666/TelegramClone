@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AbsListView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +20,7 @@ import com.example.telegramclone.models.CommonModel
 import com.example.telegramclone.models.UserModel
 import com.example.telegramclone.ui.message_recycler_view.views.AppViewFactory
 import com.example.telegramclone.ui.screens.BaseFragment
+import com.example.telegramclone.ui.screens.settings.ChangeNameFragment
 import com.example.telegramclone.utilits.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.database.DatabaseReference
@@ -85,6 +83,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initFields() {
+        setHasOptionsMenu(true)
         bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet_choice)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         appVoiceRecorder = AppVoiceRecorder()
@@ -279,5 +278,17 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment() {
         super.onDestroyView()
         appVoiceRecorder.releaseRecorder()
         adapter.onDestroy()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        activity?.menuInflater?.inflate(R.menu.single_chat_action_menu, menu)
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+
+        }
+        return true
     }
 }

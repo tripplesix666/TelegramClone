@@ -1,9 +1,10 @@
-package com.example.telegramclone.ui.screens
+package com.example.telegramclone.ui.screens.settings
 
 import android.os.Bundle
 import android.view.*
 import com.example.telegramclone.database.*
 import com.example.telegramclone.databinding.FragmentChangeUsernameBinding
+import com.example.telegramclone.ui.screens.BaseChangeFragment
 import com.example.telegramclone.utilits.*
 
 

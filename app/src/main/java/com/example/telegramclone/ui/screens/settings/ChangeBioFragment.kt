@@ -1,4 +1,4 @@
-package com.example.telegramclone.ui.screens
+package com.example.telegramclone.ui.screens.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.example.telegramclone.database.USER
 import com.example.telegramclone.database.setBioToDataBase
 import com.example.telegramclone.databinding.FragmentChangeBioBinding
+import com.example.telegramclone.ui.screens.BaseChangeFragment
 
 
 class ChangeBioFragment : BaseChangeFragment() {

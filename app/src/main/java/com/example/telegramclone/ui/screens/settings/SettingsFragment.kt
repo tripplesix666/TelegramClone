@@ -1,4 +1,4 @@
-package com.example.telegramclone.ui.screens
+package com.example.telegramclone.ui.screens.settings
 
 import android.os.Bundle
 import android.view.*
@@ -8,6 +8,7 @@ import com.canhub.cropper.options
 import com.example.telegramclone.R
 import com.example.telegramclone.database.*
 import com.example.telegramclone.databinding.FragmentSettingsBinding
+import com.example.telegramclone.ui.screens.BaseFragment
 import com.example.telegramclone.utilits.*
 
 class SettingsFragment : BaseFragment() {
@@ -60,7 +61,9 @@ class SettingsFragment : BaseFragment() {
         binding.settingsPhoneNumber.text = USER.phone
         binding.settingsStatus.text = USER.state
         binding.settingsUsername.text = USER.username
-        binding.settingsBntChangeUsername.setOnClickListener { replaceFragment(ChangeUsernameFragment()) }
+        binding.settingsBntChangeUsername.setOnClickListener { replaceFragment(
+            ChangeUsernameFragment()
+        ) }
         binding.settingsBtnChangeBio.setOnClickListener { replaceFragment(ChangeBioFragment()) }
         binding.settingsChangePhoto.setOnClickListener { changePhotoUser() }
         binding.settingsUserPhotoImageView.downloadAndSetImage(USER.photoUrl)
