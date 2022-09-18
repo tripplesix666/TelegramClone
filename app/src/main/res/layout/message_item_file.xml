@@ -101,7 +101,6 @@
             android:gravity="end"
             android:padding="@dimen/appPadding"
             android:textColor="@color/black"
-            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="14:29" />

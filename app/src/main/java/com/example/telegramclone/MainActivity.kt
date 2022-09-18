@@ -9,7 +9,7 @@ import com.example.telegramclone.database.AUTH
 import com.example.telegramclone.database.initFirebase
 import com.example.telegramclone.database.initUser
 import com.example.telegramclone.databinding.ActivityMainBinding
-import com.example.telegramclone.ui.screens.MainFragment
+import com.example.telegramclone.ui.screens.main_list.MainListFragment
 import com.example.telegramclone.ui.screens.register.EnterPhoneNumberFragment
 import com.example.telegramclone.ui.objects.AppDrawer
 import com.example.telegramclone.utilits.*
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         if (AUTH.currentUser != null) {
             appDrawer.create()
-            replaceFragment(MainFragment(), false)
+            replaceFragment(MainListFragment(), false)
         } else {
             replaceFragment(EnterPhoneNumberFragment(), false)
         }
